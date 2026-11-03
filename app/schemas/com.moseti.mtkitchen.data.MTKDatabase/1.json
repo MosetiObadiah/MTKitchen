@@ -1,0 +1,429 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "9fa6fdf3e41773a093ce97f526c93977",
+    "entities": [
+      {
+        "tableName": "meal_entry",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mealEntryId` TEXT NOT NULL, `mealType` TEXT NOT NULL, `mealData` INTEGER NOT NULL, `scheduledAt` INTEGER NOT NULL, `mealStatus` TEXT NOT NULL, `rerollCount` INTEGER NOT NULL, `skippedAt` INTEGER NOT NULL, PRIMARY KEY(`mealEntryId`))",
+        "fields": [
+          {
+            "fieldPath": "mealEntryId",
+            "columnName": "mealEntryId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mealType",
+            "columnName": "mealType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mealData",
+            "columnName": "mealData",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scheduledAt",
+            "columnName": "scheduledAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mealStatus",
+            "columnName": "mealStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rerollCount",
+            "columnName": "rerollCount",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "skippedAt",
+            "columnName": "skippedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "mealEntryId"
+          ]
+        }
+      },
+      {
+        "tableName": "meal_entry_item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mealEntryId` TEXT NOT NULL, `itemId` TEXT NOT NULL, `role` TEXT NOT NULL, PRIMARY KEY(`mealEntryId`, `itemId`, `role`), FOREIGN KEY(`mealEntryId`) REFERENCES `meal_entry`(`mealEntryId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`itemId`) REFERENCES `meal_item`(`itemId`) ON UPDATE NO ACTION ON DELETE RESTRICT )",
+        "fields": [
+          {
+            "fieldPath": "mealEntryId",
+            "columnName": "mealEntryId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemId",
+            "columnName": "itemId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "role",
+            "columnName": "role",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "mealEntryId",
+            "itemId",
+            "role"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_meal_entry_item_itemId",
+            "unique": false,
+            "columnNames": [
+              "itemId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_meal_entry_item_itemId` ON `${TABLE_NAME}` (`itemId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "meal_entry",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mealEntryId"
+            ],
+            "referencedColumns": [
+              "mealEntryId"
+            ]
+          },
+          {
+            "table": "meal_item",
+            "onDelete": "RESTRICT",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "itemId"
+            ],
+            "referencedColumns": [
+              "itemId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "meal_item",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`itemId` TEXT NOT NULL, `itemName` TEXT NOT NULL, `itemPrice` REAL NOT NULL, `itemRating` INTEGER NOT NULL, `itemTuning` REAL NOT NULL, `isDeleted` INTEGER NOT NULL, `isPrimaryFood` INTEGER NOT NULL, `isSecondaryFood` INTEGER NOT NULL, `isSnack` INTEGER NOT NULL, PRIMARY KEY(`itemId`))",
+        "fields": [
+          {
+            "fieldPath": "itemId",
+            "columnName": "itemId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemName",
+            "columnName": "itemName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemPrice",
+            "columnName": "itemPrice",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemRating",
+            "columnName": "itemRating",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemTuning",
+            "columnName": "itemTuning",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDeleted",
+            "columnName": "isDeleted",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isPrimaryFood",
+            "columnName": "isPrimaryFood",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSecondaryFood",
+            "columnName": "isSecondaryFood",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSnack",
+            "columnName": "isSnack",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "itemId"
+          ]
+        }
+      },
+      {
+        "tableName": "meal_item_meal_type",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`itemId` TEXT NOT NULL, `mealType` TEXT NOT NULL, PRIMARY KEY(`itemId`, `mealType`), FOREIGN KEY(`itemId`) REFERENCES `meal_item`(`itemId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "itemId",
+            "columnName": "itemId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mealType",
+            "columnName": "mealType",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "itemId",
+            "mealType"
+          ]
+        },
+        "foreignKeys": [
+          {
+            "table": "meal_item",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "itemId"
+            ],
+            "referencedColumns": [
+              "itemId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "meal_item_rule",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`ruleId` TEXT NOT NULL, `itemA` TEXT NOT NULL, `itemB` TEXT NOT NULL, PRIMARY KEY(`ruleId`), FOREIGN KEY(`itemA`) REFERENCES `meal_item`(`itemId`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`itemB`) REFERENCES `meal_item`(`itemId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "ruleId",
+            "columnName": "ruleId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemA",
+            "columnName": "itemA",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "itemB",
+            "columnName": "itemB",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "ruleId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_meal_item_rule_itemA_itemB",
+            "unique": true,
+            "columnNames": [
+              "itemA",
+              "itemB"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_meal_item_rule_itemA_itemB` ON `${TABLE_NAME}` (`itemA`, `itemB`)"
+          },
+          {
+            "name": "index_meal_item_rule_itemB",
+            "unique": false,
+            "columnNames": [
+              "itemB"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_meal_item_rule_itemB` ON `${TABLE_NAME}` (`itemB`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "meal_item",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "itemA"
+            ],
+            "referencedColumns": [
+              "itemId"
+            ]
+          },
+          {
+            "table": "meal_item",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "itemB"
+            ],
+            "referencedColumns": [
+              "itemId"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "meal_time",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mealItemId` TEXT NOT NULL, `mealType` TEXT NOT NULL, `dayOfTheWeek` INTEGER NOT NULL, `timeOfDay` INTEGER NOT NULL, PRIMARY KEY(`mealItemId`))",
+        "fields": [
+          {
+            "fieldPath": "mealItemId",
+            "columnName": "mealItemId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mealType",
+            "columnName": "mealType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dayOfTheWeek",
+            "columnName": "dayOfTheWeek",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timeOfDay",
+            "columnName": "timeOfDay",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "mealItemId"
+          ]
+        }
+      },
+      {
+        "tableName": "settings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` TEXT NOT NULL, `snackReminderOn` INTEGER NOT NULL, `algorithmWeight` TEXT NOT NULL, `autoTuningStepSize` REAL NOT NULL, PRIMARY KEY(`userId`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "snackReminderOn",
+            "columnName": "snackReminderOn",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "algorithmWeight",
+            "columnName": "algorithmWeight",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "autoTuningStepSize",
+            "columnName": "autoTuningStepSize",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "userId"
+          ]
+        }
+      },
+      {
+        "tableName": "shown_suggestions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mealEntryId` TEXT NOT NULL, `suggestionKey` TEXT NOT NULL, `shownAt` INTEGER NOT NULL, PRIMARY KEY(`mealEntryId`, `suggestionKey`), FOREIGN KEY(`mealEntryId`) REFERENCES `meal_entry`(`mealEntryId`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "mealEntryId",
+            "columnName": "mealEntryId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "suggestionKey",
+            "columnName": "suggestionKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "shownAt",
+            "columnName": "shownAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "mealEntryId",
+            "suggestionKey"
+          ]
+        },
+        "foreignKeys": [
+          {
+            "table": "meal_entry",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "mealEntryId"
+            ],
+            "referencedColumns": [
+              "mealEntryId"
+            ]
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9fa6fdf3e41773a093ce97f526c93977')"
+    ]
+  }
+}
