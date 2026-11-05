@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "9fa6fdf3e41773a093ce97f526c93977",
+    "identityHash": "ea0031266676161fb276bc0e5c6d3844",
     "entities": [
       {
         "tableName": "meal_entry",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mealEntryId` TEXT NOT NULL, `mealType` TEXT NOT NULL, `mealData` INTEGER NOT NULL, `scheduledAt` INTEGER NOT NULL, `mealStatus` TEXT NOT NULL, `rerollCount` INTEGER NOT NULL, `skippedAt` INTEGER NOT NULL, PRIMARY KEY(`mealEntryId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`mealEntryId` TEXT NOT NULL, `mealType` TEXT NOT NULL, `mealData` INTEGER NOT NULL, `scheduledAt` INTEGER NOT NULL, `mealStatus` TEXT NOT NULL, `rerollCount` INTEGER NOT NULL, `skippedAt` INTEGER NOT NULL, `snackNotifiedAt` INTEGER, PRIMARY KEY(`mealEntryId`))",
         "fields": [
           {
             "fieldPath": "mealEntryId",
@@ -49,6 +49,11 @@
             "columnName": "skippedAt",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "snackNotifiedAt",
+            "columnName": "snackNotifiedAt",
+            "affinity": "INTEGER"
           }
         ],
         "primaryKey": {
@@ -423,7 +428,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9fa6fdf3e41773a093ce97f526c93977')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ea0031266676161fb276bc0e5c6d3844')"
     ]
   }
 }

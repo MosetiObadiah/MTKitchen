@@ -67,4 +67,7 @@ dependencies {
     implementation("androidx.room:room-runtime:${room_version}")
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:${room_version}")
+
+    // turbine for testing flows
+    androidTestImplementation("app.cash.turbine:turbine:1.2.1")
 }

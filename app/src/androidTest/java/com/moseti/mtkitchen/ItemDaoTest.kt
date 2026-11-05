@@ -5,20 +5,22 @@ import androidx.room.Room
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import app.cash.turbine.test
 import com.moseti.mtkitchen.data.MTKDatabase
-import com.moseti.mtkitchen.data.dao.MealItemDao
+import com.moseti.mtkitchen.data.dao.ItemDao
 import com.moseti.mtkitchen.data.entity.MealItemEntity
-import junit.framework.TestCase.assertEquals
+import com.moseti.mtkitchen.data.entity.MealItemMealTypeEntity
 import kotlinx.coroutines.test.runTest
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.UUID
 
 @RunWith(AndroidJUnit4::class)
-class MealItemDaoTest {
-    private lateinit var mealItemDao: MealItemDao
+class ItemDaoTest {
+    private lateinit var itemDao: ItemDao
     private lateinit var db: MTKDatabase
 
     @Before
@@ -27,7 +29,7 @@ class MealItemDaoTest {
         db = Room.inMemoryDatabaseBuilder<MTKDatabase>(context)
             .setDriver(BundledSQLiteDriver())
             .build()
-        mealItemDao = db.mealItemDao()
+        itemDao = db.mealItemDao()
     }
 
     @After
@@ -50,6 +52,26 @@ class MealItemDaoTest {
             isSnack = false
         )
 
+        val riceForBreakfast = MealItemMealTypeEntity(
+            itemId = riceItemId,
+            mealType = "breakfast"
+        )
+
+        val riceForLuch = MealItemMealTypeEntity(
+            itemId = riceItemId,
+            mealType = "lunch"
+        )
+
+        val riceForSupper = MealItemMealTypeEntity(
+            itemId = riceItemId,
+            mealType = "supper"
+        )
+
+        itemDao.addMealItemANDMealItemMealType(riceEntity, listOf(riceForBreakfast, riceForLuch, riceForSupper))
+        val returnedMealItem = itemDao.getMealItemById(riceItemId)
+        assertEquals(riceItemId, returnedMealItem!!.itemId)
+
+
         val ugaliItemId = UUID.randomUUID().toString()
         val ugaliEntity = MealItemEntity(
             itemId = ugaliItemId,
@@ -62,16 +84,25 @@ class MealItemDaoTest {
             isSecondaryFood = false,
             isSnack = false
         )
-        mealItemDao.insertMealItem(riceEntity)
-        val riceMealEntity = mealItemDao.findItemByName("Rice")
-        assertEquals(riceMealEntity, riceEntity)
 
-        mealItemDao.softDeleteMealItem(riceItemId)
-        val isRiceItemDeleted = mealItemDao.findIfItemIsSoftDeleted(riceItemId)
-        assertEquals(true, isRiceItemDeleted)
+        val ugaliForLuch = MealItemMealTypeEntity(
+            itemId = ugaliItemId,
+            mealType = "lunch"
+        )
 
-        val isUgaliItemDeleted = mealItemDao.findIfItemIsSoftDeleted(ugaliItemId)
-        assertEquals(false, isUgaliItemDeleted)
+        val ugaliForSupper = MealItemMealTypeEntity(
+            itemId = ugaliItemId,
+            mealType = "supper"
+        )
+
+        itemDao.addMealItemANDMealItemMealType(ugaliEntity, listOf(ugaliForLuch, ugaliForSupper))
+
+        itemDao.observeActiveItems().test {
+            val expectedList = listOf(riceEntity, ugaliEntity)
+            val returnedList = awaitItem()
+            assertEquals(riceEntity, returnedList)
+            awaitComplete()
+        }
     }
 
 }

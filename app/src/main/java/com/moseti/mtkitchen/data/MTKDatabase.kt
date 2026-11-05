@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.moseti.mtkitchen.data.dao.MealItemDao
+import com.moseti.mtkitchen.data.dao.ItemDao
 import com.moseti.mtkitchen.data.entity.MealEntryEntity
 import com.moseti.mtkitchen.data.entity.MealEntryItemEntity
 import com.moseti.mtkitchen.data.entity.MealItemEntity
@@ -30,7 +30,7 @@ import kotlin.concurrent.Volatile
     exportSchema = true
 )
 abstract class MTKDatabase: RoomDatabase() {
-    abstract fun mealItemDao(): MealItemDao
+    abstract fun mealItemDao(): ItemDao
 
     companion object {
         private const val DB_NAME = "mtkitchen_db"

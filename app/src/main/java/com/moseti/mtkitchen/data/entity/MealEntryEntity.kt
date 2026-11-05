@@ -13,5 +13,6 @@ data class MealEntryEntity (
     val scheduledAt: Long,
     val mealStatus: String,
     val rerollCount: Int,
-    val skippedAt: Long
+    val skippedAt: Long,
+    val snackNotifiedAt: Long? = null
 )
